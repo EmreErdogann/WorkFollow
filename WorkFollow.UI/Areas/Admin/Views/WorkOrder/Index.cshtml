@@ -1,0 +1,89 @@
+﻿@*@model List<TaskDto>*@
+@model PaginatedList<TaskDto>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+@if (Model.Count != 0)
+{
+
+    <table class="table table-bordered table-hover table-sm mt-2">
+        <thead>
+            <tr>
+                <th>Ad</th>
+                <th>Açıklama</th>
+                <th>Oluşturulma Tarihi</th>
+                <th>Çalışan Personel</th>
+                <th>Aciliyet</th>
+                <th>Rapor Sayısı</th>
+                <th>İşlem</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Explanation</td>
+                    <td>@item.CreatedDate</td>
+                    <td>
+                        @{
+                            if (item.User == null)
+                            {
+                                <span class="badge badge-danger">Çalışan personel yok</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-success">@item.User.Name Çalışıyor</span>
+                            }
+                        }
+                    </td>
+                    <td>@item.Urgency.Definition</td>
+                    <td>@item.Report.Count</td>
+                    <td>
+                        @{
+                            if (item.User == null)
+                            {
+                                <a asp-action="AssignPersonnel" asp-route-id="@item.Id" class="btn btn-info btn-sm"><i class="fas fa-caret-right mr-2"></i>Personel Ata</a>
+                            }
+                            else
+                            {
+                                <a asp-action="Detail" asp-route-id="@item.Id" class="btn btn-info btn-sm"><i class="fas fa-info-circle mr-2"></i>Detayı Gör</a>
+                            }
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+
+}
+else
+{
+    <div class="text-center mt-4">
+
+        <p class="lead">
+            <b>Herhangi Bir İş Emri Bulunmamaktadır.</b>
+        </p>
+
+    </div>
+}
+@{
+    var prevDisable = !Model.PreviousPage ? "disabled" : "";
+    var nextDisable = !Model.NextPage ? "disabled" : "";
+
+}
+
+<a asp-action="Index"
+   asp-route-pageNumber="@(Model.PageIndex-1 )"
+   class="btn btn-success @prevDisable">
+    Önceki Sayfa
+</a>
+
+<a asp-action="Index"
+   asp-route-pageNumber="@(Model.PageIndex+1 )"
+   class="btn btn-info @nextDisable">
+    Sonraki Sayfa
+</a>

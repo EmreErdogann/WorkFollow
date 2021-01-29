@@ -1,0 +1,17 @@
+﻿@model UrgencyDto
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<form class="w-75 mx-auto p-3" method="post">
+    <div class="form-group">
+        <label asp-for="Definition"></label>
+        <input asp-for="Definition" class="form-control" />
+        <span asp-validation-for="Definition" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-success"><i class="fas fa-check mr-2"></i>Kaydet</button>
+    <button type="submit" class="btn btn-info" asp-action="Index"><i class="far fa-window-close"></i>Vazgeç</button>
+
+</form>
+

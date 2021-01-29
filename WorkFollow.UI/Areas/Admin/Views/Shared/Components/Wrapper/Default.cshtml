@@ -1,0 +1,23 @@
+﻿@model UserDto
+<style>
+</style>
+<div class="border border-primary border-left-0 border-top-0 border-bottom-0 border-right" id="sidebar-wrapper">
+
+    <div class="sidebar-heading">
+        @*<img src="~/img/@Model.Picture" alt="@Model.Name" style="height:10rem!important;"  class="w-75 img-thumbnail" />*@
+        <p class="text-center"><strong>  @Model.Name @Model.SurName </strong></p>
+    </div>
+
+    <div class="list-group list-group-flush">
+        <a asp-action="Index" asp-controller="Home" class="list-group-item list-group-item-action"><i class="fas fa-home mr-2"></i>AnaSayfa</a>
+        <a asp-controller="Urgency" asp-action="Index" class="list-group-item list-group-item-action"><i class="fas fa-exclamation"></i> Aciliyet İşlemleri</a>
+        <a asp-controller="Task" asp-action="Index" class="list-group-item list-group-item-action"><i class="fas fa-tasks"></i> Görev İşlemleri</a>
+        <a asp-controller="WorkOrder" asp-action="Index" class="list-group-item list-group-item-action"><i class="far fa-file-mr-2"></i> İş Emirleri</a>
+        <a href="#" class="list-group-item list-group-item-action "><i class="fas fa-chart-pie mr-2"></i>Grafikler</a>
+        <a href="#" class="list-group-item list-group-item-action "><i class="fas fa-chart-area mr-2"></i>İstatistikler</a>
+        <a href="#" class="list-group-item list-group-item-action "><i class="far fa-bell mr-2"></i>Bildirimler</a>
+        <a asp-controller="Profile" asp-action="Index" class="list-group-item list-group-item-action "><i class="fas fa-user mr-2"></i>Profilim</a>
+        <a asp-controller="Profile" asp-action="Logout" class="list-group-item list-group-item-action "><i class="fas fa-sign-in-alt"></i>Çıkış Yap</a>
+
+    </div>
+</div>

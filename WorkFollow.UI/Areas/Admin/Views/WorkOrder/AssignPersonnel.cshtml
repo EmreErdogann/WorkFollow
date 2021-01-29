@@ -1,0 +1,62 @@
+﻿@model TaskDto
+@{
+    ViewData["Title"] = "AssignPersonnel";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row mt-3">
+    <div class="col-md-4">
+
+        <div class="card">
+            <div class="card-header">
+                <h4 class="text-center lead pt-2 ">Görev Bilgileri</h4>
+            </div>
+
+            <div class="card-body">
+                <h5 class="card-title">@Model.Name</h5>
+                <p class="card-text">
+                    @Model.Explanation
+                </p>
+                <p class="card-text">
+                    <strong>Aciliyet Durumu :</strong> <span class="badge badge-info">@Model.Urgency.Definition</span>
+
+                </p>
+                <p class="card-text">
+                    <small>
+                        <strong>@Model.CreatedDate</strong>
+                    </small>
+                </p>
+            </div>
+        </div>
+        <a class="btn btn-warning my-2" asp-action="Index"><i class="fas fa-chevron-circle-left mr-2"></i>Geri Gel Ve İş Emirleri Gör</a>
+
+    </div>
+
+    <div class="col-md-8">
+
+        @foreach (var item in ViewBag.Verı)
+        {
+            <div class="card  mb-2 p-1">
+                <div class="row no-gutters">
+                    <div class="col-md-4">
+                        <img src="~/img/@item.Picture" class="card-img w-100" style="height:10rem!important;" alt="@item.Name">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">@item.Name @item.SurName</h5>
+                            <p class="card-text">
+                                <GetTaskUserId app-user-id="@item.Id"></GetTaskUserId>
+                            </p>
+                            <p class="card-text">
+                                <small class="text-muted">@item.Email</small>
+                                <a asp-action="PersonnelAta" asp-route-StaffId="@item.Id" asp-route-DutyId="@Model.Id" class="btn btn-primary btn-sm float-right">Görevlendir</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
+

@@ -1,0 +1,58 @@
+﻿@model TaskDto
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Areas/Member/Views/Shared/_MemberLayout.cshtml";
+}
+
+<div class="card text-white bg-success mb-3">
+    <div class="card-header"> Görevin Adı : @Model.Name</div>
+    <div class="card-body">
+        <h4 class="card-title">Görevin Acil Durumu : @Model.Urgency.Definition</h4>
+        <p class="card-text">Görevin Açıklaması : @Model.Explanation</p>
+    </div>
+</div>
+<form class="p-3" method="post" asp-action="Create">
+
+    <input type="hidden" value="@Model.Id" name="TaskId" />
+
+
+    @if (Model.Report.Count > 0)
+    {
+        @foreach (var report in Model.Report)
+        {
+
+            <div class="form-group">
+                <label>Başlık</label>
+                <input name="Definition" class="form-control" />
+                <span class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label name="Detail">Detay Alanı</label>
+                <textarea name="Detail" class="form-control"></textarea>
+                <span class="text-danger"></span>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="form-group">
+            <label>Başlık</label>
+            <input name="Definition" class="form-control" />
+            <span class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label name="Detail">Detay Alanı</label>
+            <textarea name="Detail" class="form-control"></textarea>
+            <span class="text-danger"></span>
+        </div>
+    }
+
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-success"><i class="fas fa-check mr-2"></i>Kaydet</button>
+        <button type="submit" class="btn btn-warning" asp-action="Index"><i class="far fa-window-close"></i> Vazgeç</button>
+    </div>
+</form>
+

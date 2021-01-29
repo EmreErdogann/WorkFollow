@@ -1,0 +1,45 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Member/Views/Shared/_MemberLayout.cshtml";
+}
+
+<div class="row mt-3">
+    <div class="col md-6">
+        <div class="card text-white bg-success text-center mb-3" style="max-width: 30rem;">
+
+            <div class="card-body">
+                <h4 class="card-title">Yazdığınız Rapor Sayısı</h4>
+                @if (ViewBag.ReportNumber > 0)
+                {
+                    <p class="card-text display-4">@ViewBag.ReportNumber</p>
+
+                }
+                else
+                {
+                    <p class="card-text lead">Herhangi Bir Rapor Yazmamışsınız</p>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col md-6">
+        <div class="card text-white bg-success text-center mb-3" style="max-width: 30rem;">
+
+            <div class="card-body">
+                <h4 class="card-title">Tamamladığınız Görev Sayısı</h4>
+                @if (ViewBag.TamamlananGorev > 0)
+                {
+                     <p class="card-text display-4">@ViewBag.TamamlananGorev</p>
+    
+                }
+                else
+                {
+                    <p class="card-text lead">Herhangi Bir Görev Tamamlamamışsınız</p>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,38 @@
+﻿@model TaskDto
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+@if (Model.Report.Count > 0)
+{
+    <a class="btn btn-info my-2" asp-action="Index"><i class="fas fa-chevron-circle-left mr-2"></i>Diğer Kullanıcıları Gör</a>
+    <table class="table table-hover table-sm text-center table-bordered">
+        <tr>
+            <th colspan="2">@Model.User.Name @Model.User.SurName personeliniz @Model.Name yazmış olduğu raporlar</th>
+        </tr>
+        <tr>
+            <th>Tanım</th>
+            <th>Detay</th>
+        </tr>
+      @foreach (var item in Model.Report)
+      {
+          <tr>
+              <td>@item.Definition</td>
+              <td>@item.Detail</td>
+          </tr>
+      }
+    </table>
+
+}
+else
+{
+    <div class="border border-dark mt-2 text-center lead">
+        <b> @Model.User.Name @Model.User.SurName personeliniz şuan da @Model.Name görevi üzerinde çalışıyor.Henüz rapor yazmamış</b>
+        
+</div>
+<br />
+    <a class="btn btn-info my-2" asp-action="Index"><i class="fas fa-chevron-circle-left mr-2"></i>Geri Gel</a>
+
+}
+
