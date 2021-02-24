@@ -32,7 +32,7 @@ namespace WorkFollow.Business.Implementaions
                     urgency.IsDeleted = true;
                     _unitOfWork.urgencyRepository.Add(urgency);
                     _unitOfWork.Save();
-                    return new Result<UrgencyDto>(true, "Kayıt Başarı İle Gerçekleşti");
+                    return new Result<UrgencyDto>(true, $"{model.Definition} aciliyet durumu başarı ile eklenmiştir");
                 }
                 catch (Exception ex)
                 {
@@ -97,7 +97,7 @@ namespace WorkFollow.Business.Implementaions
                     urgency.IsDeleted = true;
                     _unitOfWork.urgencyRepository.Update(urgency);
                     _unitOfWork.Save();
-                    return new Result<UrgencyDto>(true, "Kayıt Başarı İle Gerçekleşti");
+                    return new Result<UrgencyDto>(true, $"{model.Definition} adlı aciliyet durumu başarı ile güncellenmiştir");
                 }
                 catch (Exception ex)
                 {

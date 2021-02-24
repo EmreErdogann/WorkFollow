@@ -20,7 +20,7 @@ namespace WorkFollow.UI
 
             services.AddRazorPages();
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddNToastNotifyToastr();
             services.LoadMyServices();
 
         }
@@ -38,6 +38,7 @@ namespace WorkFollow.UI
             app.UseAuthorization();
             IdentityInitializer.SeedData(userManager, roleManager).Wait();
             app.UseStaticFiles();
+            app.UseNToastNotify();
 
             app.UseEndpoints(endpoints =>
             {

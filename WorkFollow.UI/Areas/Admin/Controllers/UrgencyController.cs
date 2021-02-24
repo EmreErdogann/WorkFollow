@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NToastNotify;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +16,11 @@ namespace WorkFollow.UI.Areas.Admin.Controllers
     public class UrgencyController : Controller
     {
         private readonly IUrgencyBusiness _urgencyBusiness;
-        public UrgencyController(IUrgencyBusiness urgencyBusiness)
+        private readonly IToastNotification _toastNotification;
+        public UrgencyController(IUrgencyBusiness urgencyBusiness, IToastNotification toastNotification)
         {
             _urgencyBusiness = urgencyBusiness;
+            _toastNotification = toastNotification;
         }
         public IActionResult Index()
         {
@@ -43,12 +46,19 @@ namespace WorkFollow.UI.Areas.Admin.Controllers
                 var data = _urgencyBusiness.Create(model);
                 if (data.IsSuccess)
                 {
+                    _toastNotification.AddSuccessToastMessage(data.Message, new ToastrOptions
+                    {
+                        Title = "Başarılı İşlem"
+                    });
                     return RedirectToAction("Index");
                 }
+
+
                 return View();
             }
             else
-                return View(model);
+                _toastNotification.AddErrorToastMessage("Gerekli Alanları Kontrol Edin");
+            return View(model);
         }
 
         [HttpGet]
@@ -70,12 +80,17 @@ namespace WorkFollow.UI.Areas.Admin.Controllers
                 var data = _urgencyBusiness.Update(model);
                 if (data.IsSuccess)
                 {
+                    _toastNotification.AddSuccessToastMessage(data.Message, new ToastrOptions
+                    {
+                        Title = "Başarılı İşlem"
+                    });
                     return RedirectToAction("Index");
                 }
                 return View(model);
             }
             else
-                return View(model);
+                _toastNotification.AddErrorToastMessage("Gerekli Alanları Kontrol Edin");
+            return View(model);
         }
 
         public IActionResult Delete(int urgencyId)

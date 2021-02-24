@@ -10,6 +10,7 @@
     <table class="table table-bordered table-hover table-sm mt-2">
         <thead>
             <tr>
+                <th>Id</th>
                 <th>Tanım</th>
                 <th>Eklenme Tarihi</th>
                 <th>İşlemler</th>
@@ -19,6 +20,7 @@
             @foreach (var item in Model)
             {
             <tr>
+                <td>@item.Id</td>
                 <td>@item.Definition</td>
                 <td>@item.CreatedDate.ToString("D")</td>
                 <td>
