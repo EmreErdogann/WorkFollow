@@ -33,7 +33,7 @@ namespace WorkFollow.Business.Implementaions
                     report.IsDeleted = true;
                     _unitOfWork.reportRepository.Add(report);
                     _unitOfWork.Save();
-                    return new Result<ReportDto>(true, "Kayıt Başarı İle Gerçekleşti");
+                    return new Result<ReportDto>(true, $"{model.Detail} başlıklı görev ile bilgilendirme başarı ile kaydedildi");
                 }
                 catch (Exception ex)
                 {

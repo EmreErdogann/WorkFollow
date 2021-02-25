@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NToastNotify;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,12 +18,14 @@ namespace WorkFollow.UI.Areas.Member.Controllers
     {
         private readonly ITaskBusiness _taskBusiness;
         private readonly IReportBusiness _reportBusiness;
+        private readonly IToastNotification _toastNotification;
 
 
-        public WorkOrderController(ITaskBusiness taskBusiness, IReportBusiness reportBusiness)
+        public WorkOrderController(ITaskBusiness taskBusiness, IReportBusiness reportBusiness, IToastNotification toastNotification)
         {
             _taskBusiness = taskBusiness;
             _reportBusiness = reportBusiness;
+            _toastNotification = toastNotification;
         }
         public IActionResult Index(int pageNumber = 1)
         {
@@ -73,6 +76,10 @@ namespace WorkFollow.UI.Areas.Member.Controllers
             if (id < 0)
                 return View();
             var result = _reportBusiness.GetTaskId(id);
+            if (result.IsSuccess)
+            {
+                _toastNotification.AddSuccessToastMessage(result.Message);
+            }
 
             return View(result.Data);
         }
@@ -86,6 +93,7 @@ namespace WorkFollow.UI.Areas.Member.Controllers
                 var data = _reportBusiness.Update(model);
                 if (data.IsSuccess)
                 {
+                    _toastNotification.AddSuccessToastMessage(data.Message);
                     return RedirectToAction("Index");
                 }
                 return View(model);
