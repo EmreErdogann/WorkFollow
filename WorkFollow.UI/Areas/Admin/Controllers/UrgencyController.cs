@@ -4,6 +4,7 @@ using NToastNotify;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using WorkFollow.Business.Interfaces;
 using WorkFollow.Core.DTos;
@@ -97,9 +98,9 @@ namespace WorkFollow.UI.Areas.Admin.Controllers
         {
             if (urgencyId < 0)
                 return View();
-
-            _urgencyBusiness.Delete(urgencyId);
-            return Json(null);
+            var result = _urgencyBusiness.Delete(urgencyId);
+            var ajaxResult = JsonSerializer.Serialize(result);
+            return Json(ajaxResult);
         }
     }
 }

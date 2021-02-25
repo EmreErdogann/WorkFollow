@@ -19,19 +19,16 @@
         <tbody>
             @foreach (var item in Model)
             {
-            <tr>
-                <td>@item.Id</td>
-                <td>@item.Definition</td>
-                <td>@item.CreatedDate.ToString("D")</td>
-                <td>
-                    <a asp-action="Get" asp-route-id="@item.Id" class="btn btn-warning btn-sm"><i class="far fa-edit mr-2"></i>Düzenle </a>
-                    <a href="" data-toggle="modal" data-target="#silmeEkrani" data-emre="@item.Id" class="btn btn-danger btn-sm">
+                <tr name="@item.Id">
+                    <td>@item.Id</td>
+                    <td>@item.Definition</td>
+                    <td>@item.CreatedDate.ToString("D")</td>
+                    <td>
+                        <a asp-action="Get" asp-route-id="@item.Id" class="btn btn-warning btn-sm"><i class="far fa-edit mr-2"></i>Düzenle </a>
+                        <button class="btn btn-danger btn-sm btn-delete" data-id="@item.Id"><span class="fas fa-times-circle mr-2"></span>Sil</button>
+                    </td>
 
-                        <i class="fas fa-times-circle mr-2"></i> Sil
-                    </a>
-                </td>
-               
-            </tr>
+                </tr>
             }
         </tbody>
     </table>
@@ -49,52 +46,56 @@ else
     </div>
 }
 
-<div class="modal fade" id="silmeEkrani" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">UYARI</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                Silmek istediğinizden emin misiniz?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hayır Vazgeç</button>
-                <button id="btnSil" type="button" class="btn btn-primary btn-remove">Evet Sil</button>
-            </div>
-        </div>
-    </div>
-</div>
+
 
 @section Scripts{
+
     <script type="text/javascript">
 
-        $(document).ready(function () {
-            $("#silmeEkrani").on("show.bs.modal", function (event) {
-                let tetikleyenElement = $(event.relatedTarget);
-                let id = tetikleyenElement.data("emre");
-                var url = "/Admin/Urgency/Delete?urgencyId=" + id;
-                $(".btn-remove").on('click',function () {
-
-                        $.ajax({
-                            type: "GET",
-                            url: url,
-
-                            success: function () {
-
-                                window.location.reload();
-                            },
-                            error: function (error) {
-
-                                alert(error.statuxText);
+        $(document).on('click', '.btn-delete', function () {
+            event.preventDefault();
+            const id = $(this).attr('data-id');
+            const tableRow = $(`[name="${id}"]`);
+            const urgencyDefinition = tableRow.find('td:eq(1)').text();
+            Swal.fire({
+                title: 'Silmek istediğinize emin misiniz?',
+                text: `${urgencyDefinition}  adlı aciliyet durumu silinecektir`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Evet silmek istediğime eminim.',
+                cancelButtonText: 'Hayır silmek istemiyorum'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: 'POST',
+                        dataType: 'json',
+                        data: { urgencyId: id },
+                        url: '@Url.Action("Delete", "Urgency")',
+                        success: function (data) {
+                            const taskDto = jQuery.parseJSON(data);
+                            if (taskDto != null) {
+                                Swal.fire(
+                                    'Silindi!',
+                                    `${urgencyDefinition} adlı aciliyet durumu başarı ile silinmiştir`,
+                                    'success'
+                                );
+                                tableRow.fadeOut(3500);
                             }
-                        })
+                            else
+                            {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Hata...',
+                                    text: 'Bir Hata Oluştu! resim çek ve bildir',
+                                });
+                            }
+                        },
+                        error: function (err) { console.log(err); }
                     });
+                }
             })
-
         });
 
     </script>
