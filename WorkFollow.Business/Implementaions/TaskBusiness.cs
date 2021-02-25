@@ -35,7 +35,7 @@ namespace WorkFollow.Business.Implementaions
                     task.IsDeleted = true;
                     _unitOfWork.taskRepository.Add(task);
                     _unitOfWork.Save();
-                    return new Result<TaskDto>(true, "Kayıt Başarı İle Gerçekleşti");
+                    return new Result<TaskDto>(true, $"{model.Name} adlı görev başarı ile eklenmiştir");
                 }
                 catch (Exception ex)
                 {
@@ -138,7 +138,7 @@ namespace WorkFollow.Business.Implementaions
                     task.IsDeleted = true;
                     _unitOfWork.taskRepository.Update(task);
                     _unitOfWork.Save();
-                    return new Result<TaskDto>(true, "Kayıt Başarı İle Gerçekleşti");
+                    return new Result<TaskDto>(true, $"{model.Name} adlı görev başarı ile güncellenmiştir");
                 }
                 catch (Exception ex)
                 {

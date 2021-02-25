@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NToastNotify;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using WorkFollow.Business.Interfaces;
 using WorkFollow.Core.DTos;
@@ -17,11 +19,12 @@ namespace WorkFollow.UI.Areas.Admin.Controllers
     {
         private readonly ITaskBusiness _taskBusiness;
         private readonly IUrgencyBusiness _urgencyBusiness;
-
-        public TaskController(ITaskBusiness taskBusiness, IUrgencyBusiness urgencyBusiness)
+        private readonly IToastNotification _toastNotification;
+        public TaskController(ITaskBusiness taskBusiness, IUrgencyBusiness urgencyBusiness, IToastNotification toastNotification)
         {
             _taskBusiness = taskBusiness;
             _urgencyBusiness = urgencyBusiness;
+            _toastNotification = toastNotification;
         }
         public IActionResult Index(int pageNumber = 1)
         {
@@ -32,7 +35,7 @@ namespace WorkFollow.UI.Areas.Admin.Controllers
                 //var result = data.Data;
                 return View(model);
             }
-           
+
             return View(new List<TaskDto>());
         }
 
@@ -55,8 +58,13 @@ namespace WorkFollow.UI.Areas.Admin.Controllers
                 var data = _taskBusiness.Create(model);
                 if (data.IsSuccess)
                 {
+                    _toastNotification.AddSuccessToastMessage(data.Message, new ToastrOptions
+                    {
+                        Title = "Başarılı İşlem"
+                    });
                     return RedirectToAction("Index");
                 }
+                _toastNotification.AddErrorToastMessage("Gerekli Alanları Kontrol Edin");
                 return RedirectToAction("Create");
             }
             else
@@ -92,6 +100,10 @@ namespace WorkFollow.UI.Areas.Admin.Controllers
                 var data = _taskBusiness.Update(model);
                 if (data.IsSuccess)
                 {
+                    _toastNotification.AddSuccessToastMessage(data.Message, new ToastrOptions
+                    {
+                        Title = "Başarılı İşlem"
+                    });
                     return RedirectToAction("Index");
                 }
                 return View(model);
@@ -100,14 +112,14 @@ namespace WorkFollow.UI.Areas.Admin.Controllers
                 return View(model);
         }
 
-      
-        public IActionResult Delete(int taskId)
+        [HttpPost]
+        public JsonResult Delete(int taskId)
         {
             if (taskId < 0)
-                return View();
-
-            _taskBusiness.Delete(taskId);
-            return Json(null);
+                return Json("Index");
+            var result = _taskBusiness.Delete(taskId);
+            var ajaxResult = JsonSerializer.Serialize(result);
+            return Json(ajaxResult);
         }
     }
 }

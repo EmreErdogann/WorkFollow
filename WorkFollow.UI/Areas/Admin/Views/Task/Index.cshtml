@@ -21,17 +21,14 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
+                <tr name="@item.Id">
                     <td>@item.Name</td>
                     <td>@item.Explanation</td>
                     <td>@item.Urgency.Definition</td>
                     <td>
                         <a asp-action="Get" asp-route-id="@item.Id" class="btn btn-warning btn-sm"><i class="far fa-edit mr-2"></i>Düzenle </a>
-                        
-                        <a href="" data-toggle="modal" data-target="#silmeEkrani" data-emre="@item.Id" class="btn btn-danger btn-sm">
-                           
-                            <i class="fas fa-times-circle mr-2"></i> Sil
-                        </a>
+
+                        <button class="btn btn-danger btn-sm btn-delete" data-id="@item.Id"><span></span>Sil</button>
                     </td>
 
                 </tr>
@@ -52,53 +49,53 @@ else
     </div>
 }
 
-<!-- Modal -->
-<div class="modal fade" id="silmeEkrani" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">UYARI</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                Silmek istediğinizden emin misiniz?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hayır Vazgeç</button>
-                <button id="btnSil" type="button" class="btn btn-primary btn-remove">Evet Sil</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 @section Scripts{
     <script type="text/javascript">
-
-        $(document).ready(function () {
-            $("#silmeEkrani").on("show.bs.modal", function (event) {
-                let tetikleyenElement = $(event.relatedTarget);
-                let id = tetikleyenElement.data("emre");
-                var url = "/Admin/Task/Delete?taskId=" + id;
-                $(".btn-remove").on('click', function () {
-
+        $(document).on('click', '.btn-delete', function () {
+            event.preventDefault();
+            const id = $(this).attr('data-id');
+            const tableRow = $(`[name="${id}"]`);
+            const taskName = tableRow.find('td:eq(0)').text();
+            Swal.fire({
+                title: 'Silmek istediğinize emin misiniz?',
+                text: `${taskName} adlı görev silinecektir`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Evet silmek istediğime eminim.',
+                cancelButtonText: 'Hayır silmek istemiyorum'
+            }).then((result) => {
+                if (result.isConfirmed) {
                     $.ajax({
-                        type: "GET",
-                        url: url,
-
-                        success: function () {
-
-                            window.location.reload();
+                        type: 'POST',
+                        dataType: 'json',
+                        data: { taskId: id },
+                        url: '@Url.Action("Delete", "Task")',
+                        success: function (data) {
+                            const taskDto = jQuery.parseJSON(data);
+                            if (taskDto != null) {
+                                Swal.fire(
+                                    'Silindi!',
+                                    `${taskName} adlı görev başarı ile silinmiştir`,
+                                    'success'
+                                );
+                                tableRow.fadeOut(3500);
+                            }
+                            else
+                            {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Hata...',
+                                    text: 'Bir Hata Oluştu! resim çek ve bildir',
+                                });
+                            }
                         },
-                        error: function (error) {
-
-                            alert(error.statuxText);
-                        }
-                    })
-                });
+                        error: function (err) { console.log(err); }
+                    });
+                }
             })
-
         });
 
     </script>

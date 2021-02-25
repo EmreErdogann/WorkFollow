@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using NToastNotify;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,10 +19,13 @@ namespace WorkFollow.UI.Areas.Admin.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        public ProfileController(UserManager<User> userManager, SignInManager<User> signInManager)
+        private readonly IToastNotification _toastNotification;
+
+        public ProfileController(UserManager<User> userManager, SignInManager<User> signInManager, IToastNotification toastNotification)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _toastNotification = toastNotification;
         }
         public async Task<IActionResult> Index()
         {
@@ -66,7 +70,10 @@ namespace WorkFollow.UI.Areas.Admin.Controllers
                 var result = await _userManager.UpdateAsync(updateUser);
                 if (result.Succeeded)
                 {
-                    TempData["message"] = "Güncelleme işleminiz başarı ile gerçekleşti";
+                    _toastNotification.AddSuccessToastMessage("Bilgileriniz Başarı İle Güncellenmiştir", new ToastrOptions
+                    {
+                        Title = "Başarılı İşlem"
+                    });
                     return RedirectToAction("Index");
                 }
 

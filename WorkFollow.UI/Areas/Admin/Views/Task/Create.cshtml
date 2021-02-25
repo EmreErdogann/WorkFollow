@@ -14,7 +14,7 @@
 
     <div class="form-group">
         <label asp-for="Explanation"></label>
-        <textarea asp-for="Explanation" class="form-control"></textarea>
+        <textarea id="text-editor" class="form-control"></textarea>
         <span asp-validation-for="Explanation" class="text-danger"></span>
     </div>
 
@@ -28,3 +28,18 @@
     <button type="submit" class="btn btn-warning" asp-action="Index"><i class="far fa-window-close"></i> Vazgeç</button>
 
 </form>
+
+@section Scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.23.0/trumbowyg.min.js" integrity="sha512-sffB9/tXFFTwradcJHhojkhmrCj0hWeaz8M05Aaap5/vlYBfLx5Y7woKi6y0NrqVNgben6OIANTGGlojPTQGEw==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.23.0/langs/tr.min.js" integrity="sha512-+HGzdrYvtA0U9cp5kJad8OpjTvUi6ywZ9z9kXFGiV3EaAR1II5X6lfulUm6/F9GKesHW+jHFfAqwXK0juybvMw==" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function () {
+        $('#text-editor').trumbowyg();
+
+    });
+</script>
+}
+
+@section Styles{
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.23.0/ui/trumbowyg.min.css" integrity="sha512-iw/TO6rC/bRmSOiXlanoUCVdNrnJBCOufp2s3vhTPyP1Z0CtTSBNbEd5wIo8VJanpONGJSyPOZ5ZRjZ/ojmc7g==" crossorigin="anonymous" />
+}
