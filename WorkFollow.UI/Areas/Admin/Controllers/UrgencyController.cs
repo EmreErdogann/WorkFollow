@@ -53,8 +53,6 @@ namespace WorkFollow.UI.Areas.Admin.Controllers
                     });
                     return RedirectToAction("Index");
                 }
-
-
                 return View();
             }
             else
@@ -97,7 +95,7 @@ namespace WorkFollow.UI.Areas.Admin.Controllers
         public IActionResult Delete(int urgencyId)
         {
             if (urgencyId < 0)
-                return View();
+                return RedirectToAction("Index");
             var result = _urgencyBusiness.Delete(urgencyId);
             var ajaxResult = JsonSerializer.Serialize(result);
             return Json(ajaxResult);

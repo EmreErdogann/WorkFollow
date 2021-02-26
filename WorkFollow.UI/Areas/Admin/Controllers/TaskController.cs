@@ -77,8 +77,8 @@ namespace WorkFollow.UI.Areas.Admin.Controllers
 
         }
 
-        [HttpGet]
-        public IActionResult Get(int id)
+        [Route("urgency-details/{id}", Name = "urgencyDetailsRoute")]
+        public ViewResult Get(int id)
         {
             var result = _urgencyBusiness.GetAll();
             ViewBag.Tası = result.Data.ToList();
